@@ -24,10 +24,12 @@ export default function MyNotes(){
     }, [dispatch, token, user_id, navigate])
 
     function renderNotes(data){
-        console.log(data)
+        console.log(Object.values(data))
         if(data && Object.keys(data).length > 0){
             let notes = Object.values(data).map(note => (
-                <TextCard key = {note.id} id = {note.id} label = {note.label} datetime = {note.datetime }/>
+                <li key = {note.id}>
+                    <TextCard id = {note.id} label = {note.label} datetime = {note.datetime}/>
+                </li>
             ));
 
             console.log(notes)
@@ -46,8 +48,12 @@ export default function MyNotes(){
     }
 
     return (
-        <div>
-            {renderNotes(notes)}
-        </div>
+        <>
+            <div>
+                <ul>
+                    {renderNotes(notes)}
+                </ul>
+            </div>
+        </>
     )
 }
