@@ -85,7 +85,7 @@ const app_path = 'http://localhost:9999/yii2-project/web/'
                     token: token,
                 }
             })
-            return response;
+            return response.data;
         }
         catch(e){
             console.log(e);

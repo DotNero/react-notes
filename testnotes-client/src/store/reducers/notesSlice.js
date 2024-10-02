@@ -1,9 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import { fetchAll } from '../../components/Requests';
 
+
+export const loadUserNotes = createAsyncThunk(
+  'notes/loadUserNotes',
+  async ({ user_id, token }) => {
+    const response = await fetchAll(user_id, token);
+    console.log(response);
+    return response;
+  }
+);
+
 const initialState = {
-  ids: null,
-  entities: null,
+  ids: [],
+  entities: {},
+  status: 'idle',
+  error: null, 
 };
 
 const notesSlice = createSlice({
@@ -24,19 +36,27 @@ const notesSlice = createSlice({
         delete state.entities[note_id];
         state.ids = state.ids.filter((id) => id !== note_id);
       },
-      //определить, будет ли полностью этот редьюсер сносить хранилище, пока не сносит, но добавляет без учета содержимого
-      loadUserNotes(state, action){
-        const {token, user_id} = action.payload;
-        let data = fetchAll(user_id, token)
-        
-        for (let note of data){
-            state.entities[note.id] = note;
-            state.ids.push(note.id)
-        }
-
-      }
     },
+    extraReducers: (builder) => {
+      builder
+        .addCase(loadUserNotes.pending, (state) => {
+        state.status = 'loading';
+      })
+        .addCase(loadUserNotes.fulfilled, (state, action) => {
+          state.status = 'succeeded';
+          const notes = action.payload;
+          console.log(notes)
+          for(const note of Object.values(notes)) {
+            state.entities[note.id] = note;
+            state.ids.push(note.id);
+          }
+        })
+        .addCase(loadUserNotes.rejected, (state, action) => {
+          state.status = 'failed';
+          state.error = action?.error.message;
+        })
+    }
   });
   
-  export const { addNote, updateNote, removeNote, loadUserNotes} = notesSlice.actions;
+  export const { addNote, updateNote, removeNote} = notesSlice.actions;
   export default notesSlice.reducer;

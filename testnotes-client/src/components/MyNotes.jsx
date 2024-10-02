@@ -6,10 +6,12 @@ import { useNavigate } from 'react-router';
 
 export default function MyNotes(){
     const navigate = useNavigate();
-    const notes = useSelector((state) => state.notes.entities)
-    const noteIds = useSelector((state) => state.notes.ids)
-    const user_id = useSelector((state) => state.auth.user_id)
-    const token = useSelector((state) => state.auth.token)
+    const notes = useSelector(state => state.notes.entities)
+    const noteIds = useSelector(state => state.notes.ids)
+    const user_id = useSelector(state => state.auth.user_id)
+    const token = useSelector(state => state.auth.token)
+    const status = useSelector(state => state.notes.status)
+    const error = useSelector(state => state.notes.error)
     const dispatch = useDispatch()
 
     useEffect(()=>{
@@ -19,24 +21,33 @@ export default function MyNotes(){
         else{
             navigate("/login");
         }
-    })
+    }, [dispatch, token, user_id, navigate])
 
-    function Notes(data){
-        if(data){
-        const notes = data.map((note) => 
-        {
-            <TextCard id = {note.id} label = {note.label} datetime = {note.datetime} />
-        })
-        return notes}
+    function renderNotes(data){
+        console.log(data)
+        if(data && Object.keys(data).length > 0){
+            let notes = Object.values(data).map(note => (
+                <TextCard key = {note.id} id = {note.id} label = {note.label} datetime = {note.datetime }/>
+            ));
+
+            console.log(notes)
+            return notes;
+        }
         else{
             return <p>No cards</p>
         }
     }
-    return(
-        <>
-            <div>
-                {Notes(notes)}
-            </div>
-        </>
+    
+    if (status === 'loading'){
+        return <p>Loading ...</p>
+    }
+    if (status === 'failed'){
+        return <p>Error: {error}</p>
+    }
+
+    return (
+        <div>
+            {renderNotes(notes)}
+        </div>
     )
 }

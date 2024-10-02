@@ -8,11 +8,10 @@ import { clearAuth } from '../store/reducers/authSlice.js'
 
 export default function Navbar(){
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const dispatch = useDispatch();
 
-    const token = useSelector(state => state.token);
-    const user_id = useSelector(state => state.user_id);
+    const token = useSelector(state => state.auth.token);
+    const user_id = useSelector(state => state.auth.user_id);
 
 
     const handleLogout = async () => {

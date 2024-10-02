@@ -18,7 +18,7 @@ export default function MainRouter(){
             <Route path ="/about" element = {<div>about</div>}/>
             <Route path ="/login" element = {<LoginForm />}/>
             <Route path ="/reg" element ={<RegistrationForm/>}/>
-            <Route path = "/mynotes" loader = {fetchAll} element = {<MyNotes/>}/>
+            <Route path = "/mynotes" element = {<MyNotes/>}/>
             <Route path = "/notes/:noteId" ></Route>
         </Routes>
         </div>
