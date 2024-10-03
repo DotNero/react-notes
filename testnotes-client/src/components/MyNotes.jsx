@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { loadUserNotes } from '../store/reducers/notesSlice';
 import TextCard from './notes/TextCard';
 import { useNavigate } from 'react-router';
+import { Fragment } from 'react';
 
 export default function MyNotes(){
     const navigate = useNavigate();
@@ -23,22 +24,6 @@ export default function MyNotes(){
         }
     }, [dispatch, token, user_id, navigate])
 
-    function renderNotes(data){
-        console.log(Object.values(data))
-        if(data && Object.keys(data).length > 0){
-            let notes = Object.values(data).map(note => (
-                <li key = {note.id}>
-                    <TextCard id = {note.id} label = {note.label} datetime = {note.datetime}/>
-                </li>
-            ));
-
-            console.log(notes)
-            return notes;
-        }
-        else{
-            return <p>No cards</p>
-        }
-    }
     
     if (status === 'loading'){
         return <p>Loading ...</p>
@@ -47,13 +32,14 @@ export default function MyNotes(){
         return <p>Error: {error}</p>
     }
 
-    return (
-        <>
-            <div>
-                <ul>
-                    {renderNotes(notes)}
-                </ul>
-            </div>
-        </>
-    )
+    if (notes && Object.keys(notes).length > 0){
+        let notesList = Object.values(notes).map(note => <div><TextCard  key = {note.id} id = {note.id} label = {note.label} datetime = {note.datetime}/></div>)
+        console.log(Object.values(notes))
+        console.log(notesList)
+            return (
+                <>
+                    {notesList}
+                </>
+            )
+    }
 }

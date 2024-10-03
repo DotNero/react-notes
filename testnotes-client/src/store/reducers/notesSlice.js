@@ -6,7 +6,6 @@ export const loadUserNotes = createAsyncThunk(
   'notes/loadUserNotes',
   async ({ user_id, token }) => {
     const response = await fetchAll(user_id, token);
-    console.log(response);
     return response;
   }
 );
@@ -45,12 +44,11 @@ const notesSlice = createSlice({
         .addCase(loadUserNotes.fulfilled, (state, action) => {
           state.status = 'succeeded';
           const notes = action.payload;
-          console.log(notes)
-          for(const note of Object.values(notes)) {
+          state.ids = [];
+          Object.values(notes).map((note) => {
             state.entities[note.id] = note;
             state.ids.push(note.id);
-          }
-        })
+        })})
         .addCase(loadUserNotes.rejected, (state, action) => {
           state.status = 'failed';
           state.error = action?.error.message;
