@@ -49,6 +49,26 @@ const app_path = 'http://localhost:9999/yii2-project/web/'
         }
     }
 
+    //TODO: сделать на бэке
+    export async function updateNote(user_id, token, data){
+        try{
+            let response = await axios({
+                method: 'post',
+                mode: 'cors',
+                url: `${app_path}site/update-note`,
+                headers: {
+                    contentType: 'application/json',
+                },
+                user_id: user_id,
+                token: token,
+                data: JSON.stringify(data)
+            })
+            return response;
+        }
+        catch(e){
+            console.log(e);
+        }
+    }
     export async function createNote(user_id, token, label, body){
         try{
             let response = await axios({

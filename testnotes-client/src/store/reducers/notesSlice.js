@@ -10,6 +10,14 @@ export const loadUserNotes = createAsyncThunk(
   }
 );
 
+//TODO: доделать
+export const saveUserNotes = createAsyncThunk(
+  'notes/saveUserNotes',
+  async ({user_id, token}) => {
+    const response = await 
+  }
+)
+
 const initialState = {
   ids: [],
   entities: {},
