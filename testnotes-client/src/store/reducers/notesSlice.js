@@ -48,7 +48,9 @@ const notesSlice = createSlice({
           Object.values(notes).map((note) => {
             state.entities[note.id] = note;
             state.ids.push(note.id);
-        })})
+          })
+        })
+          
         .addCase(loadUserNotes.rejected, (state, action) => {
           state.status = 'failed';
           state.error = action?.error.message;

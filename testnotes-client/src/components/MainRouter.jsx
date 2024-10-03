@@ -4,7 +4,8 @@ import Navbar from "./Navbar";
 import Main from "./Main";
 import LoginForm from "./LoginForm";
 import MyNotes from "./MyNotes";
-import RegistrationForm from "./RegistrationForm"
+import RegistrationForm from "./RegistrationForm";
+import Note from "./notes/Note";
 import {fetchAll} from './Requests';
 
 
@@ -19,7 +20,9 @@ export default function MainRouter(){
             <Route path ="/login" element = {<LoginForm />}/>
             <Route path ="/reg" element ={<RegistrationForm/>}/>
             <Route path = "/mynotes" element = {<MyNotes/>}/>
-            <Route path = "/notes/:noteId" ></Route>
+            <Route path = "/note" >
+                <Route path = ":noteId" element = {<Note/>}/>
+            </Route>
         </Routes>
         </div>
     </BrowserRouter>
