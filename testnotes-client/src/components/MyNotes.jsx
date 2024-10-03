@@ -33,7 +33,7 @@ export default function MyNotes(){
     }
 
     if (notes && Object.keys(notes).length > 0){
-        let notesList = Object.values(notes).map(note => <div><TextCard  key = {note.id} id = {note.id} label = {note.label} datetime = {note.datetime}/></div>)
+        let notesList = Object.values(notes).map(note => <div><TextCard id = {note.id} label = {note.label} datetime = {note.datetime}/></div>)
         console.log(Object.values(notes))
         console.log(notesList)
             return (
