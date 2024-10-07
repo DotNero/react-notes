@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import { fetchAll } from '../../components/Requests';
+import { fetchAll, saveNote, errorUtils} from '../../components/Requests';
 
 
 export const loadUserNotes = createAsyncThunk(
@@ -11,10 +11,20 @@ export const loadUserNotes = createAsyncThunk(
 );
 
 //TODO: доделать
-export const saveUserNotes = createAsyncThunk(
-  'notes/saveUserNotes',
-  async ({user_id, token}) => {
-    const response = await 
+export const saveUserNote = createAsyncThunk(
+  'notes/saveUserNote',
+  async ({user_id, token, data}) => {
+    try{
+    console.log(data)
+    console.log(user_id)
+    console.log(token)
+    const response = await saveNote(user_id, token, data);
+    console.log(response)
+    return response
+    }
+    catch(e){
+      return errorUtils.getError(e)
+    }
   }
 )
 
@@ -60,6 +70,17 @@ const notesSlice = createSlice({
         })
           
         .addCase(loadUserNotes.rejected, (state, action) => {
+          state.status = 'failed';
+          state.error = action?.error.message;
+        })
+        .addCase(saveUserNote.pending, (state) => {
+          state.status = 'loading';
+        })
+        // TODO возможно нужно что-то добавить на успех и ошибку
+        .addCase(saveUserNote.fulfilled, (state) => {
+          state.status = 'succeeded';
+        })
+        .addCase(saveUserNote.rejected, (state, action) => {
           state.status = 'failed';
           state.error = action?.error.message;
         })

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router';
-import { loadUserNotes, updateNote } from '../../store/reducers/notesSlice';
+import { loadUserNotes, saveUserNote, updateNote } from '../../store/reducers/notesSlice';
 
 export default function Note(){
 
@@ -16,8 +16,8 @@ export default function Note(){
     const token = useSelector(state => state.auth.token)
     const user_id = useSelector(state => state.auth.user_id)
     const error = useSelector(state => state.notes.error)
-    const [updatedLabel, setUpdatedLabel] = useState(null);
-    const [updatedBody, setUpdatedBody] = useState(null);
+    // const [updatedLabel, setUpdatedLabel] = useState(null);
+    // const [updatedBody, setUpdatedBody] = useState(null);
     
     let note = null;
     
@@ -29,7 +29,22 @@ export default function Note(){
         else{
             navigate("/login");
         }
-    }, [dispatch, token, user_id, navigate])
+        
+    }, [dispatch, token, user_id])
+
+    useEffect(() => {
+        return ()=>{
+            let noteForUpdate = null;
+            for(let temp of Object.values(notes)){
+                if(temp.id == noteId){
+                    noteForUpdate = temp;
+                }
+            }
+            if (noteForUpdate != null){
+                dispatch(saveUserNote({token: token, user_id: user_id, data: noteForUpdate}))
+            }
+        }
+    },[dispatch])
 
     // useEffect(()=>{
         

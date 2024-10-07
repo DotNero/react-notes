@@ -2,6 +2,24 @@ import axios from 'axios';
 
 const app_path = 'http://localhost:9999/yii2-project/web/'
 
+
+export const errorUtils = {
+    getError: (error) => {
+      let e = error;
+      if (error.response) {
+        e = error.response.data;                   // data, status, headers
+        if (error.response.data && error.response.data.error) {
+          e = error.response.data.error;           // my app specific keys override
+        }
+      } else if (error.message) {
+        e = error.message;
+      } else {
+        e = "Unknown error occured";
+      }
+      return e;
+    },
+  };
+
     export async function logout(token){
         let response = await axios({
             method: 'post',
@@ -50,7 +68,7 @@ const app_path = 'http://localhost:9999/yii2-project/web/'
     }
 
     //TODO: сделать на бэке
-    export async function updateNote(user_id, token, data){
+    export async function saveNote(user_id, token, data_){
         try{
             let response = await axios({
                 method: 'post',
@@ -59,9 +77,11 @@ const app_path = 'http://localhost:9999/yii2-project/web/'
                 headers: {
                     contentType: 'application/json',
                 },
-                user_id: user_id,
-                token: token,
-                data: JSON.stringify(data)
+                data: {
+                    user_id: user_id,
+                    token: token,
+                    note: data_
+                }
             })
             return response;
         }
